@@ -14,7 +14,7 @@
         </div>
     @endif
 
-    <form action="{{ route('products.store') }}" method="POST">
+    <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
         @csrf <div class="mb-3">
             <label for="product_name" class="form-label">商品名 <span class="text-danger">*必須</span></label>
             <input type="text" class="form-control" id="product_name" name="product_name" value="{{ old('product_name') }}" required>
@@ -45,6 +45,12 @@
         <div class="mb-3">
             <label for="comment" class="form-label">詳細・コメント</label>
             <textarea class="form-control" id="comment" name="comment" rows="3">{{ old('comment') }}</textarea>
+        </div>
+
+        <!-- 画像選択フォームを追加 -->
+        <div class="mb-3">
+            <label for="image" class="form-label">商品画像</label>
+            <input type="file" class="form-control" id="image" name="image" accept="image/*">
         </div>
 
         <button type="submit" class="btn btn-primary">登録</button>

@@ -14,7 +14,7 @@
         </div>
     @endif
 
-    <form action="{{ route('products.update', $product->id) }}" method="POST">
+    <form action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         <div class="mb-3">
@@ -51,6 +51,21 @@
         <div class="mb-3">
             <label for="comment" class="form-label">詳細・コメント</label>
             <textarea class="form-control" id="comment" name="comment" rows="3">{{ old('comment', $product->comment) }}</textarea>
+        </div>
+
+        <!-- 🖼️ 画像編集フォームを追加 -->
+        <div class="mb-3">
+            <label for="image" class="form-label">商品画像</label>
+            
+            <!-- もし既に画像が登録されていたら、現在の画像を表示する -->
+            @if ($product->image_path)
+                <div class="mb-2">
+                    <p class="mb-1 text-muted" style="font-size: 0.9rem;">現在の画像:</p>
+                    <img src="{{ asset('storage/' . $product->image_path) }}" alt="商品画像" style="max-width: 150px; height: auto;">
+                </div>
+            @endif
+
+            <input type="file" class="form-control" id="image" name="image" accept="image/*">
         </div>
 
         <button type="submit" class="btn btn-primary">更新</button>
