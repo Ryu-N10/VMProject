@@ -14,16 +14,48 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
+        // 画面からの入力データを受け取る 📩
         $search = $request->input('search');
+        $min_price = $request->input('min_price'); // 価格下限
+        $max_price = $request->input('max_price'); // 価格上限
+        $min_stock = $request->input('min_stock'); // 在庫下限
+        $max_stock = $request->input('max_stock'); // 在庫上限
 
         $query = Product::with('company');
 
+        // キーワード検索 🔍
         if (!empty($search)) {
             $query->where('product_name', 'LIKE', "%{$search}%");
         }
 
+        // 価格（下限）で絞り込み 💰
+        if (!empty($min_price)) {
+            $query->where('price', '>=', $min_price);
+        }
+
+        // 価格（上限）で絞り込み 💰
+        if (!empty($max_price)) {
+            $query->where('price', '<=', $max_price);
+        }
+
+        // 在庫数（下限）で絞り込み 📦
+        if (!empty($min_stock)) {
+            $query->where('stock', '>=', $min_stock);
+        }
+
+        // 在庫数（上限）で絞り込み 📦
+        if (!empty($max_stock)) {
+            $query->where('stock', '<=', $max_stock);
+        }
+
         $products = $query->get();
 
+        // Ajax通信の場合は、テーブル部品だけを返却する ⚡
+        if ($request->ajax()) {
+            return view('products.table', compact('products'));
+        }
+
+        // 通常のアクセス時は画面全体を返却する 📄
         return view('products.index', compact('products'));
     }
 
@@ -75,7 +107,9 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         $product->delete();
-        return redirect()->route('products.index');
+
+        // ⚡ Ajax通信への返事として成功メッセージ（JSON）を返す
+        return response()->json(['success' => '商品を削除しました']);
     }
 
     /**

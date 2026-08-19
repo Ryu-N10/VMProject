@@ -17,3 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+use App\Http\Controllers\SalesController;
+
+// 購入処理APIの窓口を設定
+Route::post('/buy', [SalesController::class, 'buy']);

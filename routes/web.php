@@ -36,7 +36,7 @@ Route::post('/products/update/{id}', [ProductController::class, 'update'])->name
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
 
 // ⑥ 削除処理
-Route::post('/products/destroy/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
 
 // ⑦ 一覧画面（表示）
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
